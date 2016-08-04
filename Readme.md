@@ -1,7 +1,7 @@
 # Личный проект «Код и Магия» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Alexey Kavasin](https://up.htmlacademy.ru/javascript/6/user/59151).
-* Наставник: `Неизвестно`.
+* Наставник: Евгений Лепёшкин.
 
 ---
 
