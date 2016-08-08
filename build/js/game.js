@@ -394,19 +394,54 @@ window.Game = (function() {
     /**
      * Отрисовка экрана паузы.
      */
+
     _drawPauseScreen: function() {
+      var ctx = this.ctx;
+      var textStartX = 340;
+      var textStartY = 70;
+      var lineHeight = 20;
+
+      ctx.beginPath();
+      ctx.moveTo(310, 210);
+      ctx.lineTo(330, 60);
+      ctx.lineTo(630, 60);
+      ctx.lineTo(630, 200);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(300, 200);
+      ctx.lineTo(320, 50);
+      ctx.lineTo(620, 50);
+      ctx.lineTo(620, 190);
+      ctx.closePath();
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+
+      ctx.font = '16px PT Mono';
+      ctx.textBaseline = 'hanging';
+      ctx.fillStyle = '#000000';
+
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          ctx.fillText('Ты выиграл!', textStartX, textStartY);
+          ctx.fillText('Сыграем еще?', textStartX, textStartY + lineHeight);
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          ctx.fillText('Ты проиграл!', textStartX, textStartY);
+          ctx.fillText('Попробуй сначала', textStartX, textStartY + lineHeight);
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          ctx.fillText('Пауза', textStartX, textStartY);
+          ctx.fillText('Пробел для продолжения', textStartX, textStartY + lineHeight);
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          ctx.fillText('Привет!', textStartX, textStartY);
+          ctx.fillText('Я перемещаюсь при нажатии', textStartX, textStartY + lineHeight);
+          ctx.fillText('на стрелки и пускаю фаербол', textStartX, textStartY + lineHeight * 2);
+          ctx.fillText('клавишей шифт. Жми пробел,', textStartX, textStartY + lineHeight * 3);
+          ctx.fillText('чтобы начать!', textStartX, textStartY + lineHeight * 4);
           break;
       }
     },
