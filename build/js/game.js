@@ -396,10 +396,30 @@ window.Game = (function() {
      */
 
     _drawPauseScreen: function() {
+
+      function textWrap(ctx, text, x, y, maxWidth, lineHeight) {
+        var words = text.split(' ');
+        var line = '';
+        for (var i = 0; i < words.length; i++) {
+          var testLine = line + words[i] + ' ';
+          var testWidth = ctx.measureText(testLine).width;
+          if (testWidth > maxWidth) {
+            ctx.fillText(line, x, y);
+            line = words[i] + ' ';
+            y += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, x, y);
+      }
+
       var ctx = this.ctx;
       var textStartX = 340;
       var textStartY = 70;
       var lineHeight = 20;
+      var maxWidth = 250;
+      var text = ['Привет! Я перемещаюсь при нажатии на стрелки и пускаю фаербол клавишей шифт. Жми пробел, чтобы начать!', 'Ты выиграл! Сыграем еще?', 'Ты проиграл! Попробуй сначала', 'Пауза. Пробел для продолжения'];
 
       ctx.beginPath();
       ctx.moveTo(310, 210);
@@ -425,23 +445,16 @@ window.Game = (function() {
 
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          ctx.fillText('Ты выиграл!', textStartX, textStartY);
-          ctx.fillText('Сыграем еще?', textStartX, textStartY + lineHeight);
+          textWrap(ctx, text[1], textStartX, textStartY, maxWidth, lineHeight);
           break;
         case Verdict.FAIL:
-          ctx.fillText('Ты проиграл!', textStartX, textStartY);
-          ctx.fillText('Попробуй сначала', textStartX, textStartY + lineHeight);
+          textWrap(ctx, text[2], textStartX, textStartY, maxWidth, lineHeight);
           break;
         case Verdict.PAUSE:
-          ctx.fillText('Пауза', textStartX, textStartY);
-          ctx.fillText('Пробел для продолжения', textStartX, textStartY + lineHeight);
+          textWrap(ctx, text[3], textStartX, textStartY, maxWidth, lineHeight);
           break;
         case Verdict.INTRO:
-          ctx.fillText('Привет!', textStartX, textStartY);
-          ctx.fillText('Я перемещаюсь при нажатии', textStartX, textStartY + lineHeight);
-          ctx.fillText('на стрелки и пускаю фаербол', textStartX, textStartY + lineHeight * 2);
-          ctx.fillText('клавишей шифт. Жми пробел,', textStartX, textStartY + lineHeight * 3);
-          ctx.fillText('чтобы начать!', textStartX, textStartY + lineHeight * 4);
+          textWrap(ctx, text[0], textStartX, textStartY, maxWidth, lineHeight);
           break;
       }
     },
