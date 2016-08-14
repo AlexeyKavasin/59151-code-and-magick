@@ -1,28 +1,30 @@
 'use strict';
 
 window.form = (function() {
-  var reviewMark = document.querySelectorAll('input[name="review-mark"]');
+  var reviewForm = document.querySelector('.review-form');
+  // var reviewMark = document.querySelectorAll('input[name="review-mark"]');
+  var reviewMark = reviewForm.elements['review-mark'];
   var reviewName = document.querySelector('#review-name');
   var reviewLabelName = document.querySelector('.review-fields-name');
   var reviewText = document.querySelector('#review-text');
   var reviewLabelText = document.querySelector('.review-fields-text');
   var submit = document.querySelector('.review-submit');
   var reviewFieldsBlock = document.querySelector('.review-fields');
-
+  var formContainer = document.querySelector('.overlay-container');
+  var formCloseButton = document.querySelector('.review-form-close');
   reviewName.required = true;
-  // reviewMark.value = 1;
-  // reviewName.value = 'Aleksey';
-  // reviewText.value = 'Игра норм!';
-  for (var i = 0; i < reviewMark.length; i++) {
-    reviewMark[i].onchange = disableSubmit();
-  }
-  reviewName.oninput = disableSubmit();
-  reviewText.oninput = disableSubmit();
+  reviewLabelText.style.visibility = 'hidden';
+  submit.disabled = true;
+
 
   function disableSubmit() {
-    console.log(12);
-    reviewText.required = reviewMark.value < 3;
-    submit.disabled = !(reviewText.validity.valid && reviewName.validity.valid);
+    if (reviewMark.value < 3) {
+      reviewText.required = true;
+      reviewLabelText.style.visibility = 'visible';
+    } else {
+      reviewText.required = false;
+      reviewLabelText.style.visibility = 'hidden';
+    }
 
     if(reviewText.validity.valid) {
       reviewLabelText.style.visibility = 'hidden';
@@ -41,10 +43,28 @@ window.form = (function() {
     } else {
       reviewFieldsBlock.style.visibility = 'visible';
     }
+
+    submit.disabled = !(reviewText.validity.valid && reviewName.validity.valid);
   }
 
-  var formContainer = document.querySelector('.overlay-container');
-  var formCloseButton = document.querySelector('.review-form-close');
+  formCloseButton.onclick = function(evt) {
+    evt.preventDefault();
+    form.close();
+  };
+
+  reviewName.oninput = function() {
+    disableSubmit();
+  };
+
+  reviewText.oninput = function() {
+    disableSubmit();
+  };
+
+  for (var i = 0; i < reviewMark.length; i++) {
+    reviewMark[i].onchange = function() {
+      disableSubmit();
+    };
+  }
 
   var form = {
     onClose: null,
@@ -64,11 +84,6 @@ window.form = (function() {
         this.onClose();
       }
     }
-  };
-
-  formCloseButton.onclick = function(evt) {
-    evt.preventDefault();
-    form.close();
   };
 
   return form;
