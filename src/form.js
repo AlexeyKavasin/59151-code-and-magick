@@ -1,8 +1,11 @@
 'use strict';
 
 window.form = (function() {
+  var browserCookies = require('browser-cookies');
+  var cookieMark = 'review-mark';
+  var cookieName = 'review-name';
+
   var reviewForm = document.querySelector('.review-form');
-  // var reviewMark = document.querySelectorAll('input[name="review-mark"]');
   var reviewMark = reviewForm.elements['review-mark'];
   var reviewName = document.querySelector('#review-name');
   var reviewLabelName = document.querySelector('.review-fields-name');
@@ -12,10 +15,13 @@ window.form = (function() {
   var reviewFieldsBlock = document.querySelector('.review-fields');
   var formContainer = document.querySelector('.overlay-container');
   var formCloseButton = document.querySelector('.review-form-close');
+
   reviewName.required = true;
   reviewLabelText.style.visibility = 'hidden';
   submit.disabled = true;
 
+  reviewMark.value = browserCookies.get(cookieMark);
+  reviewName.value = browserCookies.get(cookieName);
 
   function disableSubmit() {
     if (reviewMark.value < 3) {
@@ -65,6 +71,23 @@ window.form = (function() {
       disableSubmit();
     };
   }
+
+  reviewForm.onsubmit = function() {
+    browserCookies.set('review-mark', reviewMark.value, {expires: expireCount()});
+    browserCookies.set('review-name', reviewName.value, {expires: expireCount()});
+  };
+
+  var expireCount = function() {
+    var now = new Date();
+    var expireDate = new Date(now.getFullYear() - 1, 11, 9);
+    var oneDay = 1000 * 60 * 60 * 24;
+
+    if (now.getMonth() === 11 && now.getDate() > 9) {
+      expireDate.setFullYear(expireDate.getFullYear() + 1);
+    }
+
+    return Math.ceil( (now.getTime() - expireDate.getTime()) / (oneDay) );
+  };
 
   var form = {
     onClose: null,
