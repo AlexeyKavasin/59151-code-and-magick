@@ -1,7 +1,7 @@
 'use strict';
 
 var reviews = [];
-var httpReq = 'http://localhost:1506/api/reviews?callback=__jsonpCallback';
+var httpRequest = 'http://localhost:1506/api/reviews?callback=__jsonpCallback';
 
 var __jsonpCallback = function(data) {
   reviews = data;
@@ -12,6 +12,7 @@ var implementJson = function(httpReq, func) {
   scriptEl.src = httpReq;
   document.body.appendChild(scriptEl);
   func();
+  return reviews;
 };
 
-implementJson(httpReq, __jsonpCallback);
+implementJson(httpRequest, __jsonpCallback);
