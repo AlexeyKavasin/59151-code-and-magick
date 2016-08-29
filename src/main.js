@@ -11,7 +11,9 @@ for(var j = 0; j < pics.length; j++) {
   picsURL.push(pics[j].src);
 }
 
-var gallery = new Gallery(picsURL);
+// убрать window
+window.gallery = new Gallery(picsURL);
+
 
 var game = new Game(document.querySelector('.demo'));
 game.initializeLevelAndStart();
