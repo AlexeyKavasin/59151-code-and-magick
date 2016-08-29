@@ -3,7 +3,15 @@
 require('./reviews');
 var form = require('./form');
 var Game = require('./game');
+var Gallery = require('./gallery');
+var pics = document.querySelectorAll('.photogallery-image img');
+var picsURL = [];
 
+for(var j = 0; j < pics.length; j++) {
+  picsURL.push(pics[j].src);
+}
+
+var gallery = new Gallery(picsURL);
 
 var game = new Game(document.querySelector('.demo'));
 game.initializeLevelAndStart();
