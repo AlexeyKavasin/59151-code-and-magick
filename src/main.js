@@ -5,15 +5,24 @@ var form = require('./form');
 var Game = require('./game');
 var Gallery = require('./gallery');
 var pics = document.querySelectorAll('.photogallery-image img');
+var picsLinks = document.querySelectorAll('.photogallery-image');
 var picsURL = [];
+var picsLinksArr = [];
+var gallery = new Gallery(picsURL);
 
 for(var j = 0; j < pics.length; j++) {
   picsURL.push(pics[j].src);
 }
 
-// убрать window
-window.gallery = new Gallery(picsURL);
+for(var i = 0; i < picsLinks.length; i++) {
+  picsLinksArr.push(picsLinks[i]);
+}
 
+picsLinksArr.forEach(function(picslink, k) {
+  picsLinks[k].onclick = function() {
+    gallery.show(k);
+  };
+});
 
 var game = new Game(document.querySelector('.demo'));
 game.initializeLevelAndStart();

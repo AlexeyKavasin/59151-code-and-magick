@@ -1,6 +1,5 @@
 'use strict';
 
-var pics = document.querySelectorAll('.photogallery-image img');
 var activePicture = 0;
 
 var Gallery = function(pictures) {
@@ -35,11 +34,6 @@ var Gallery = function(pictures) {
       self.setActivePicture(self.activePicture - 1);
     }
   };
-  for(var i = 0; i < pics.length; i++) {
-    pics[i].onclick = function() {
-      self.show(self.pictures.indexOf(this.src));
-    };
-  }
 };
 
 Gallery.prototype.show = function(num) {
