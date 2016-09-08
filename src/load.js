@@ -1,14 +1,20 @@
 'use strict';
 
-window.__jsonpCallback = function(data) {
-  window.reviews = data;
-};
+var load = function(url, paramsObj, callback) {
+  var xhr = new XMLHttpRequest();
 
-var load = function(httpReq, callback) {
-  var scriptEl = document.createElement('script');
-  scriptEl.src = httpReq + '__jsonpCallback';
-  scriptEl.onload = callback;
-  document.body.appendChild(scriptEl);
+  xhr.onload = function(evt) {
+    var loadedData = JSON.parse(evt.target.response);
+    callback(loadedData);
+  };
+
+  xhr.open(
+ 'GET', url +
+ '?from=' + paramsObj.from +
+ '&to=' + paramsObj.to +
+ '&filter=' + paramsObj.filter);
+
+  xhr.send();
 };
 
 module.exports = load;
