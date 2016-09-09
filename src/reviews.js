@@ -8,11 +8,7 @@ var reviewsMore = document.querySelector('.reviews-controls-more');
 var PAGE_SIZE = 3;
 var pageNumber = 0;
 var reviews = [];
-var paramsObj = {};
-
-paramsObj.from = pageNumber * PAGE_SIZE;
-paramsObj.to = (pageNumber * PAGE_SIZE) + PAGE_SIZE;
-paramsObj.filter = '';
+var currentFilter = 'reviews-all';
 
 var reviewsVisibilityToggle = function() {
   reviewsFilter.classList.toggle('invisible');
@@ -21,7 +17,8 @@ var reviewsVisibilityToggle = function() {
 var changeFilter = function(filterID) {
   reviewsContainer.innerHTML = '';
   pageNumber = 0;
-  paramsObj.filter = filterID;
+  currentFilter = filterID;
+  console.log(currentFilter);
   addReviews();
 };
 
@@ -32,12 +29,24 @@ var renderReviews = function(data) {
     var review = new Review(item);
     reviewsContainer.appendChild(review.element);
   });
+
+  if(!reviews.length) {
+    reviewsMore.classList.add('invisible');
+  } else {
+    reviewsMore.classList.remove('invisible');
+  }
+
 };
 
 var addReviews = function() {
   reviewsVisibilityToggle();
 
-  load('http://localhost:1506/api/reviews', paramsObj, renderReviews);
+  load('http://localhost:1506/api/reviews', {
+    from: pageNumber * PAGE_SIZE,
+    to: (pageNumber * PAGE_SIZE) + PAGE_SIZE,
+    filter: currentFilter
+  }, renderReviews);
+  pageNumber++;
 
   reviewsVisibilityToggle();
 };
