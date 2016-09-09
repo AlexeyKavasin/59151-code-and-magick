@@ -18,7 +18,6 @@ var changeFilter = function(filterID) {
   reviewsContainer.innerHTML = '';
   pageNumber = 0;
   currentFilter = filterID;
-  console.log(currentFilter);
   addReviews();
 };
 
