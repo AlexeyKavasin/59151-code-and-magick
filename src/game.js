@@ -238,6 +238,16 @@ LevelsInitialize[Level.INTRO] = function(state) {
 };
 
 /**
+  Переменные для эффекта параллакса
+*/
+var THROTTLE_TIMEOUT = 100;
+var INITIAL_CLOUDS_POSITION = '0px';
+var scrollTimeout;
+var clouds = document.querySelector('.header-clouds');
+clouds.style.backgroundPosition = INITIAL_CLOUDS_POSITION;
+var demo = document.querySelector('.demo');
+
+/**
  * Конструктор объекта Game. Создает canvas, добавляет обработчики событий
  * и показывает приветственный экран.
  * @param {Element} container
@@ -255,7 +265,7 @@ var Game = function(container) {
   this._onKeyDown = this._onKeyDown.bind(this);
   this._onKeyUp = this._onKeyUp.bind(this);
   this._pauseListener = this._pauseListener.bind(this);
-
+  this._onScroll = this._onScroll.bind(this);
   this.setDeactivated(false);
 };
 
@@ -728,10 +738,24 @@ Game.prototype = {
     }
   },
 
+  _onScroll: function() {
+    var self = this;
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      if(demo.getBoundingClientRect().bottom < 0) {
+        self.setGameStatus(Game.Verdict.PAUSE);
+      }
+    }, THROTTLE_TIMEOUT);
+
+    var scrolled = window.pageYOffset;
+    clouds.style.backgroundPosition = -(scrolled / 4) + 'px';
+  },
+
   /** @private */
   _initializeGameListeners: function() {
     window.addEventListener('keydown', this._onKeyDown);
     window.addEventListener('keyup', this._onKeyUp);
+    window.addEventListener('scroll', this._onScroll);
   },
 
   /** @private */
