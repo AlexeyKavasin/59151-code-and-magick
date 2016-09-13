@@ -11,26 +11,12 @@ if ('content' in templateElement) {
 }
 
 var Review = function(data) {
-  var self = this;
   this.data = data;
   this.element = this.getReviewElement(data);
   this.reviewQuizAnswerYes = this.element.querySelector('.review-quiz-answer-yes');
   this.reviewQuizAnswerNo = this.element.querySelector('.review-quiz-answer-no');
-
-  this.onReviewQuizAnswerYes = function() {
-    self.reviewQuizAnswerYes.classList.add('review-quiz-answer-active');
-    if(self.reviewQuizAnswerNo.classList.contains('review-quiz-answer-active')) {
-      self.reviewQuizAnswerNo.classList.remove('review-quiz-answer-active');
-    }
-  };
-
-  this.onReviewQuizAnswerNo = function() {
-    self.reviewQuizAnswerNo.classList.add('review-quiz-answer-active');
-    if(self.reviewQuizAnswerYes.classList.contains('review-quiz-answer-active')) {
-      self.reviewQuizAnswerYes.classList.remove('review-quiz-answer-active');
-    }
-  };
-
+  this.onReviewQuizAnswerYes = this.onReviewQuizAnswerYes.bind(this);
+  this.onReviewQuizAnswerNo = this.onReviewQuizAnswerNo.bind(this);
   this.reviewQuizAnswerYes.addEventListener('click', this.onReviewQuizAnswerYes);
   this.reviewQuizAnswerNo.addEventListener('click', this.onReviewQuizAnswerNo);
 };
@@ -42,16 +28,21 @@ Review.prototype = {
     element.querySelector('.review-text').textContent = review.description;
     var starsBlock = element.querySelector('span.review-rating');
 
-    if (review.rating === 2) {
-      starsBlock.style.width = '80px';
-    } else if (review.rating === 3) {
-      starsBlock.style.width = '120px';
-    } else if (review.rating === 4) {
-      starsBlock.style.width = '160px';
-    } else if (review.rating === 5) {
-      starsBlock.style.width = '200px';
-    } else {
-      starsBlock.style.width = '30px';
+    switch(review.rating) {
+      case 2:
+        starsBlock.style.width = '80px';
+        break;
+      case 3:
+        starsBlock.style.width = '120px';
+        break;
+      case 4:
+        starsBlock.style.width = '160px';
+        break;
+      case 5:
+        starsBlock.style.width = '200px';
+        break;
+      default:
+        starsBlock.style.width = '30px';
     }
 
     var img = new Image();
@@ -78,7 +69,18 @@ Review.prototype = {
 
     return element;
   },
-
+  onReviewQuizAnswerYes: function() {
+    this.reviewQuizAnswerYes.classList.add('review-quiz-answer-active');
+    if(this.reviewQuizAnswerNo.classList.contains('review-quiz-answer-active')) {
+      this.reviewQuizAnswerNo.classList.remove('review-quiz-answer-active');
+    }
+  },
+  onReviewQuizAnswerNo: function() {
+    this.reviewQuizAnswerNo.classList.add('review-quiz-answer-active');
+    if(this.reviewQuizAnswerYes.classList.contains('review-quiz-answer-active')) {
+      this.reviewQuizAnswerYes.classList.remove('review-quiz-answer-active');
+    }
+  },
   remove: function() {
     this.reviewQuizAnswerYes.removeEventListener('click', this.onReviewQuizAnswerYes);
     this.reviewQuizAnswerNo.removeEventListener('click', this.onReviewQuizAnswerNo);

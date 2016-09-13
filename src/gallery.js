@@ -3,8 +3,6 @@
 var activePicture = 0;
 
 var Gallery = function(pictures) {
-  var self = this;
-
   this.pictures = pictures;
   this.galleryContainer = document.querySelector('.overlay-gallery');
   this.galleryImgContainer = document.querySelector('.overlay-gallery-preview');
@@ -14,26 +12,31 @@ var Gallery = function(pictures) {
   this.galleryTotal = document.querySelector('.preview-number-total');
   this.galleryClose = document.querySelector('.overlay-gallery-close');
   this.activePicture = activePicture;
+  this.onGalleryClose = this.onGalleryClose.bind(this);
+  this.onGalleryNext = this.onGalleryNext.bind(this);
+  this.onGalleryPrevious = this.onGalleryPrevious.bind(this);
+};
 
-  this.onGalleryClose = function() {
-    self.hide();
-  };
-  this.onGalleryNext = function() {
-    var limitMax = pictures.length - 1;
-    if(self.activePicture >= limitMax) {
-      self.activePicture = limitMax;
-    } else {
-      self.setActivePicture(self.activePicture + 1);
-    }
-  };
-  this.onGalleryPrevious = function() {
-    var limitMin = 0;
-    if(self.activePicture <= limitMin) {
-      self.activePicture = limitMin;
-    } else {
-      self.setActivePicture(self.activePicture - 1);
-    }
-  };
+Gallery.prototype.onGalleryClose = function() {
+  this.hide();
+};
+
+Gallery.prototype.onGalleryNext = function() {
+  var limitMax = this.pictures.length - 1;
+  if(this.activePicture >= limitMax) {
+    this.activePicture = limitMax;
+  } else {
+    this.setActivePicture(this.activePicture + 1);
+  }
+};
+
+Gallery.prototype.onGalleryPrevious = function() {
+  var limitMin = 0;
+  if(this.activePicture <= limitMin) {
+    this.activePicture = limitMin;
+  } else {
+    this.setActivePicture(this.activePicture - 1);
+  }
 };
 
 Gallery.prototype.show = function(num) {
