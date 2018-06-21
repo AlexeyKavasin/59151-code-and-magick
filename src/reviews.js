@@ -41,7 +41,7 @@ var changeFilter = function(filterID) {
 var addReviews = function() {
   reviewsVisibilityToggle();
 
-  load('http://localhost:1506/api/reviews', {
+  load('https://assets.htmlacademy.ru/api/reviews', {
     from: pageNumber * PAGE_SIZE,
     to: (pageNumber * PAGE_SIZE) + PAGE_SIZE,
     filter: currentFilter
